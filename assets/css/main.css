@@ -1170,6 +1170,35 @@ section,
   z-index: 1;
 }
 
+
+
+
+
+
+
+/*I added*/
+.features .features-video {
+  position: relative;
+  min-height: 400px;
+}
+
+.features .features-video vid {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 1;
+}
+
+
+
+
+
+
+
+
 .features h3 {
   font-size: 28px;
   font-weight: 700;
