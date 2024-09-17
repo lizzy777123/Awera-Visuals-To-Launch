@@ -1494,7 +1494,7 @@ section,
   z-index: 2;
 }
 
-/* Orginal code with dark / faded overlay*/
+/* Orginal code with dark / faded overlay
 .real-estate .card:before {
   content: "";
   position: absolute;
