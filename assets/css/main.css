@@ -1486,15 +1486,16 @@ section,
   min-height: 500px;
 }
 
+/* - I removed the dar / faded overlay. As the pictures were showing much darker*/
 .real-estate .card:before {
   content: "";
   position: absolute;
   inset: 0;
   background:none; /*Removed dark / faded overlay*/
   z-index: 2;
-}
+} 
 
-/* Orginal code with dark / faded overlay
+/* Orginal code with dark / faded overlay 
 .real-estate .card:before {
   content: "";
   position: absolute;
