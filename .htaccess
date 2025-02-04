@@ -11,9 +11,3 @@ RewriteRule ^home$ /index.html [L]
 # Load index.html when the root URL is accessed
 DirectoryIndex index.html
 
-
-
-RewriteEngine On
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteRule ^about$ about.html [L]
-
