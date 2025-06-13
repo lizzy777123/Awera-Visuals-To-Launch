@@ -27,11 +27,16 @@
   <label for="grossIncome">Gross Income ($):</label>
   <input type="number" id="grossIncome" required />
 
+  <label for="taxPaid">Federal Tax Already Paid ($):</label>
+  <input type="number" id="taxPaid" value="0" />
+
   <label for="deductionType">Deduction Type:</label>
   <select id="deductionType">
     <option value="standard">Standard Deduction</option>
     <option value="itemized">Itemized Deduction</option>
   </select>
+
+  <div id="standardDeductionDisplay"></div>
 
   <div id="itemizedContainer" style="display:none;">
     <label for="itemizedDeductions">Itemized Deductions ($):</label>
@@ -99,8 +104,25 @@ const taxBrackets = {
   ]
 };
 
+function updateStandardDeductionDisplay() {
+  const status = document.getElementById("filingStatus").value;
+  const deductionType = document.getElementById("deductionType").value;
+  const display = document.getElementById("standardDeductionDisplay");
+  if (deductionType === "standard") {
+    display.innerHTML = `<p><strong>Standard Deduction:</strong> $${standardDeductions[status].toLocaleString()}</p>`;
+  } else {
+    display.innerHTML = "";
+  }
+}
+
 document.getElementById("deductionType").addEventListener("change", function () {
-  document.getElementById("itemizedContainer").style.display = this.value === "itemized" ? "block" : "none";
+  const isItemized = this.value === "itemized";
+  document.getElementById("itemizedContainer").style.display = isItemized ? "block" : "none";
+  updateStandardDeductionDisplay();
+});
+
+document.getElementById("filingStatus").addEventListener("change", function () {
+  updateStandardDeductionDisplay();
 });
 
 document.getElementById("taxForm").addEventListener("submit", function (e) {
@@ -108,6 +130,7 @@ document.getElementById("taxForm").addEventListener("submit", function (e) {
 
   const status = document.getElementById("filingStatus").value;
   const income = parseFloat(document.getElementById("grossIncome").value);
+  const taxPaid = parseFloat(document.getElementById("taxPaid").value);
   const deductionType = document.getElementById("deductionType").value;
   const itemized = parseFloat(document.getElementById("itemizedDeductions").value);
   const loan = parseFloat(document.getElementById("studentLoanInterest").value);
@@ -135,7 +158,8 @@ document.getElementById("taxForm").addEventListener("submit", function (e) {
 
   const childCredit = children * 2000;
   const totalCredits = childCredit + otherCredits;
-  const finalTax = Math.max(0, tax + ssTax + medicareTax - totalCredits);
+  const totalTax = Math.max(0, tax + ssTax + medicareTax - totalCredits);
+  const finalTax = Math.max(0, totalTax - taxPaid);
 
   const result = document.getElementById("result");
   result.style.display = "block";
@@ -146,6 +170,7 @@ document.getElementById("taxForm").addEventListener("submit", function (e) {
     <p><strong>Social Security Tax:</strong> $${ssTax.toFixed(2)}</p>
     <p><strong>Medicare Tax:</strong> $${medicareTax.toFixed(2)}</p>
     <p><strong>Total Credits (Child + Other):</strong> $${totalCredits.toFixed(2)}</p>
+    <p><strong>Tax Paid:</strong> $${taxPaid.toFixed(2)}</p>
     <h3>Final Tax Owed: $${finalTax.toFixed(2)}</h3>
   `;
 });
